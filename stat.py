@@ -24,19 +24,21 @@ countPositive = 0
 countPositiveBingo = 0
 countNegative = 0
 countNegativeBingo = 0
+for positiveWord in positiveWords:
+    countPositive+=1
+for negativeWord in negativeWords:
+    countNegative+=1
 for token in d['model']['vocab']:
     tokenDekoded = decoder.decode([token])
     if (" " in tokenDekoded[0:1]):
-        tokenWord = line[1:len(tokenDekoded)]
+        tokenWord = tokenDekoded[1:len(tokenDekoded)]
     else:
         tokenWord = tokenDekoded
     for positiveWord in positiveWords:
-        countPositive+=1
-        if tokenWord in line[0:len(tokenWord)]:
+        if tokenWord == positiveWord[0:len(tokenWord)]:
             countPositiveBingo+=1
     for negativeWord in negativeWords:
-        countNegative+=1
-        if tokenWord in line[0:len(tokenWord)]:
+        if  tokenWord == negativeWord[0:len(tokenWord)]:
             countNegativeBingo+=1
 print("countPositive ", countPositive)
 print("countPositiveBingo ", countPositiveBingo)
