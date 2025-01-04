@@ -4,14 +4,15 @@ from tokenizers.decoders import ByteLevel
 with open("opinion-lexicon-English/positive-words.txt") as file_in_positive:
     positiveWords = []
     for line in file_in_positive:
-        if (not ";" in line[0:1]):
-           positiveWords.append(line[0:len(line)-1])
+        line = line.strip()
+        if line and not line.startswith(";"): #ce ni prazna plus ne zacne
+           positiveWords.append(line)
 
 with open("opinion-lexicon-English/negative-words.txt") as file_in_negative:
     negativeWords = []
     for line in file_in_negative:
-        if (not ";" in line[0:1]):
-           negativeWords.append(line[0:len(line)-1])
+        if line and not line.startswith(";"):
+           negativeWords.append(line)
 
 d = None
 with open(r"tokenizer.json", 'r', encoding='utf-8') as f:
