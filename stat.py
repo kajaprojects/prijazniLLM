@@ -15,7 +15,6 @@ with open("opinion-lexicon-English/negative-words.txt") as file_in_negative:
         if line and not line.startswith(";"):
            negativeWords.append(line)
 
-d = None
 with open(r"tokenizer.json", 'r', encoding='utf-8') as f:
     d = json.load(f)
 #print(d)
@@ -31,8 +30,8 @@ matchNegativeCount = 0
 tokenStats = {}
 
 for token in d['model']['vocab']:
-    tokenDekoded = decoder.decode([token])
-    tokenWord = tokenDekoded.lstrip()
+    tokenDecoded = decoder.decode([token])
+    tokenWord = tokenDecoded.lstrip()
 
     matchPositiveCount = sum(1 for positiveWord in positiveWords if tokenWord == positiveWord[:len(tokenWord)])
     matchNegativeCountCount = sum(1 for negativeWord in negativeWords if tokenWord == negativeWord[:len(tokenWord)])
