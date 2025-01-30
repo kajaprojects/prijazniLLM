@@ -1,4 +1,5 @@
 import json
+import pandas as pd
 from tokenizers.decoders import ByteLevel
 
 with open("opinion-lexicon-English/positive-words.txt") as file_in_positive:
@@ -21,27 +22,34 @@ with open(r"tokenizer.json", 'r', encoding='utf-8') as f:
 
 vocab = []
 decoder = ByteLevel()
-countPositive = 0
-countPositiveBingo = 0
-countNegative = 0
-countNegativeBingo = 0
-for positiveWord in positiveWords:
-    countPositive+=1
-for negativeWord in negativeWords:
-    countNegative+=1
+totalPositive = len(positiveWords) #vse pozitivne
+#countPositiveBingo = 0 #koliko zetonov matcha
+totalNegative = len(negativeWords) #vse negativne
+#countNegativeBingo = 0
+matchPositiveCount = 0
+matchNegativeCount = 0
+tokenStats = {}
+
 for token in d['model']['vocab']:
     tokenDekoded = decoder.decode([token])
-    if (" " in tokenDekoded[0:1]):
-        tokenWord = tokenDekoded[1:len(tokenDekoded)]
-    else:
-        tokenWord = tokenDekoded
-    for positiveWord in positiveWords:
-        if tokenWord == positiveWord[0:len(tokenWord)]:
-            countPositiveBingo+=1
-    for negativeWord in negativeWords:
-        if  tokenWord == negativeWord[0:len(tokenWord)]:
-            countNegativeBingo+=1
-print("countPositive ", countPositive)
-print("countPositiveBingo ", countPositiveBingo)
-print("countNegative ", countNegative)
-print("countNegativeBingo ", countNegativeBingo)
+    tokenWord = tokenDekoded.lstrip()
+
+    matchPositiveCount = sum(1 for positiveWord in positiveWords if tokenWord == positiveWord[:len(tokenWord)])
+    matchNegativeCountCount = sum(1 for negativeWord in negativeWords if tokenWord == negativeWord[:len(tokenWord)])
+
+    totalMatch = matchPositiveCount + matchNegativeCountCount
+
+    tokenStats[tokenWord] = {
+        "totalMatch": totalMatch,
+        "positiveCount": matchPositiveCount,
+        "negativeCount": matchNegativeCountCount,
+        "stat_pos": matchPositiveCount / totalMatch if totalMatch > 0 else 0,
+        "stat_neg": matchNegativeCountCount / totalMatch if totalMatch > 0 else 0,
+    }
+
+statistika = pd.DataFrame.from_dict(tokenStats, orient='index')
+statistika.to_csv("tokenStats.csv")
+#print("countPositive ", totalPositive)
+#print("countPositiveBingo ", countPositiveBingo)
+#print("countNegative ", totalNegative)
+#print("countNegativeBingo ", countNegativeBingo)
