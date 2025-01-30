@@ -42,8 +42,8 @@ for token in d['model']['vocab']:
         "totalMatch": totalMatch,
         "positiveCount": matchPositiveCount,
         "negativeCount": matchNegativeCountCount,
-        "stat_pos": matchPositiveCount / totalMatch if totalMatch > 0 else 0,
-        "stat_neg": matchNegativeCountCount / totalMatch if totalMatch > 0 else 0,
+        "statPos": matchPositiveCount / totalMatch if totalMatch > 0 else 0,
+        "statNeg": matchNegativeCountCount / totalMatch if totalMatch > 0 else 0,
     }
 
 statistika = pd.DataFrame.from_dict(tokenStats, orient='index')
